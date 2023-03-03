@@ -2,9 +2,15 @@
 pipeline {
 
     agent none
+    
+      environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
 
     stages {
-
+    
+    
        stage('Build') {
        
          agent {
@@ -12,41 +18,48 @@ pipeline {
     	  }
     	  
           steps { 
-            dir('/home/ubuntu/workspace/newchatbot/src')
-             { 
-             sh 'sudo docker build --tag nltk-chatbot .'  
-             sh 'ls -l'	
+             dir('/home/ubuntu/workspace/terraform/terraform-files')
+             {    	
+             sh 'terraform init -input=false -force-copy'
+             sh 'terraform apply -target=archive_file.lambda_hello_world -auto-approve'
           }
        }
        }
        
-       stage('Upload') {
+      stage('Deploy') {
        
-          agent {
+         agent {
+           label 'chatbot2'  	  
+    	  }
+    	  
+          steps { 
+             dir('/home/ubuntu/workspace/terraform/terraform-files')
+             {  
+             sh 'terraform init -input=false -force-copy'
+             sh 'terraform apply -target=aws_s3_bucket.lambda_bucket -target=random_pet.lambda_bucket_name -target=aws_s3_bucket_acl.bucket_acl -target=aws_s3_object.lambda_hello_world -auto-approve'
+          }
+       }
+       }
+       
+       stage('Connect') {
+       
+         agent {
            label 'docker'  	  
     	  }
     	  
           steps { 
-             sh 'aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 342375422541.dkr.ecr.us-east-1.amazonaws.com'  
-             sh 'sudo docker tag nltk-chatbot 342375422541.dkr.ecr.us-east-1.amazonaws.com/daniel_chatbot:latest'	
-             sh 'sudo docker push 342375422541.dkr.ecr.us-east-1.amazonaws.com/daniel_chatbot:latest'
+             dir('/home/ubuntu/workspace/terraform/terraform-files')
+             {  
+             sh 'terraform init -input=false -force-copy'
+             
+             sh 'terraform apply -target=aws_lambda_function.hello_world -target=aws_cloudwatch_log_group.hello_world -target=aws_iam_role.lambda_exec -target=aws_iam_role_policy_attachment.lambda_policy -auto-approve'
+             
+             sh 'terraform apply -target=aws_apigatewayv2_api.lambda -target=aws_apigatewayv2_stage.lambda -target=aws_apigatewayv2_integration.hello_world -target=aws_apigatewayv2_route.hello_world -target=aws_cloudwatch_log_group.api_gw -target=aws_lambda_permission.api_gw -auto-approve'
           }
        }
-       
-       stage('Deploy') {
-       
-          agent {
-           label 'chatbot2'  
-    	  }
-    	  
-          steps { 
-		sh 'kubectl apply -f eks-files/deployment.yml'
-		sh 'kubectl apply -f eks-files/service.yml'	
-		sh 'kubectl rollout restart deployment/chatbot'			
-          }
        }
-
- }
+             
+       }              
  }
 
 
