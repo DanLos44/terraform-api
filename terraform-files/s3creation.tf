@@ -1,16 +1,6 @@
-provider "aws" {
-  region = var.aws_region
-
-  default_tags {
-    tags = {
-      hashicorp-learn = "lambda-api-gateway"
-    }
-  }
-
-}
 
 resource "random_pet" "lambda_bucket_name" {
-  prefix = "leumi"
+  prefix = "hello"
   length = 1
 }
 
