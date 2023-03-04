@@ -14,7 +14,7 @@ you can visit this site for more info:
 https://www.blazemeter.com/blog/how-to-integrate-your-github-repository-to-your-jenkins-project
 
 2)Install docker on both agents
-visit this site for more info:
+you can visit this site for more info:
 https://docs.docker.com/engine/install/ubuntu/
 
 3)Install terraform on both agents
@@ -35,7 +35,7 @@ terraform apply
 The pipeline in the end will print you the link, which should look like this:
 base_url = "https://<your api gateway link>/hello"
 
--- how to delete --
+-- How to delete --
 Once you want to remove all the resources created with this project use:
 terraform destroy
 
