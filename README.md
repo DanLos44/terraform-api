@@ -14,6 +14,7 @@ First agent creates a AWS API Gateway to interact with this function.
 How to build
 ------------
 First of all make sure you have the folowing:
+
 1)A git repo integrated with jenkins(webhook)
 
 2)Install docker on both agents
