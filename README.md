@@ -20,23 +20,23 @@ First of all make sure you have the folowing:
 - you can visit this site for more info: https://docs.docker.com/engine/install/ubuntu/
 
 3)Install terraform on both ag-ents
-- sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
-- wget -O- https://apt.releases.hashicorp.com/gpg | \
+* sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+* wget -O- https://apt.releases.hashicorp.com/gpg | \
 gpg --dearmor | \
 sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-- echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+* echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
 https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
 sudo tee /etc/apt/sources.list.d/hashicorp.list
-- sudo apt update
-- sudo apt-get install terraform
+* sudo apt update
+* sudo apt-get install terraform
 
 
 How to run
 ------------
 -If you want to run this project without a pipeline you can use the following commands:
 
-terraform init
-terraform apply
+* terraform init
+* terraform apply
 
 -If not, create a trigger like a push event to start the pipeline automatic
 
