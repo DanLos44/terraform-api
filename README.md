@@ -22,7 +22,7 @@ First of all make sure you have the folowing:
 2)Install docker on both agents
 - you can visit this site for more info: https://docs.docker.com/engine/install/ubuntu/
 
-3)Install terraform on both ag-ents
+3)Install terraform on both agents
 
 ```
 - sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
